@@ -11,23 +11,10 @@
 #
 
 set -eu
+VERSION=$(date +%Y%m%d.%H%M%S)
 
 : ${GIT_EMAIL:?required}
 : ${GIT_NAME:?required}
-
-if [[ -z ${VERSION_FROM} ]]; then
-  echo >&2 "VERSION_FROM environment variable not set, or empty.  Did you misconfigure Concourse?"
-  exit 2
-fi
-if [[ ! -f ${VERSION_FROM} ]]; then
-  echo >&2 "Version file (${VERSION_FROM}) not found.  Did you misconfigure Concourse?"
-  exit 2
-fi
-VERSION=$(cat ${VERSION_FROM})
-if [[ -z ${VERSION} ]]; then
-  echo >&2 "Version file (${VERSION_FROM}) was empty.  Did you misconfigure Concourse?"
-  exit 2
-fi
 
 if [[ ! -f ${REPO_ROOT}/ci/release_notes.md ]]; then
   echo >&2 "ci/release_notes.md not found.  Did you forget to write them?"
@@ -37,7 +24,6 @@ fi
 ###############################################################
 
 go version; echo; echo
-#?#ORIGIN=$(pwd)
 TARGETS=${TARGETS:-linux/amd64 darwin/amd64}
 ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )
 
@@ -55,26 +41,21 @@ echo ">> Using GOPATH ${GOPATH}"
 go get github.com/mitchellh/gox
 popd
 
-if [[ -n ${STATIC_BINARY} && ${STATIC_BINARY} != "false" ]]; then
-	export CGO_ENABLED=0
-fi
-
+export CGO_ENABLED=0
 pushd $REPO_ROOT
 mkdir artifacts
 gox -osarch="${TARGETS}" --output="artifacts/${BINARY}-{{.OS}}-{{.Arch}}" -ldflags="-X main.Version=${VERSION}" ./...
-go build -o "${BINARY}" -ldflags="-X main.Version=${VERSION}" ${CMD_PKG:-.}
-./${BINARY} -v
+go build -o "${BINARY}" ${CMD_PKG:-.}
 popd
 
+if [[ ! -f ${REPO_ROOT}/ci/releases_notes.md ]]; then
+	echo "_no release notes provided (yet)_" \
+		> ${REPO_ROOT}/ci/releases_notes.md
+fi
 echo "v${VERSION}"                         > ${RELEASE_ROOT}/tag
 echo "${RELEASE_NAME} v${VERSION}"         > ${RELEASE_ROOT}/name
 mv ${REPO_ROOT}/ci/release_notes.md          ${RELEASE_ROOT}/notes.md
 mv ${REPO_ROOT}/artifacts                    ${RELEASE_ROOT}/artifacts
-
-cat > ${RELEASE_ROOT}/notification <<EOF
-<!here> New ${RELEASE_NAME} v${VERSION} released!
-EOF
-
 
 # GIT!
 if [[ -z $(git config --global user.email) ]]; then

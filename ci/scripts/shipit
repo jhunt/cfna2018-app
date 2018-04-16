@@ -38,6 +38,7 @@ popd
 
 export CGO_ENABLED=0
 pushd $REPO_ROOT
+grep -h github *.go | sort | uniq | xargs go get
 mkdir artifacts
 gox -osarch="${TARGETS}" --output="artifacts/${BINARY}-{{.OS}}-{{.Arch}}" -ldflags="-X main.Version=${VERSION}" ./...
 go build -o "${BINARY}" ${CMD_PKG:-.}

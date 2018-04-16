@@ -54,14 +54,11 @@ mv ${REPO_ROOT}/ci/release_notes.md          ${RELEASE_ROOT}/notes.md
 mv ${REPO_ROOT}/artifacts                    ${RELEASE_ROOT}/artifacts
 
 # GIT!
-if [[ -z $(git config --global user.email) ]]; then
-  git config --global user.email "${GIT_EMAIL}"
-fi
-if [[ -z $(git config --global user.name) ]]; then
-  git config --global user.name "${GIT_NAME}"
-fi
+git config --global user.email "${GIT_EMAIL}"
+git config --global user.name "${GIT_NAME}"
 
-(cd ${REPO_ROOT}
+(set +e # don't do this at home kids
+ cd ${REPO_ROOT}
  git merge --no-edit ${BRANCH}
  git add -A
  git status

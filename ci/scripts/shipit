@@ -16,11 +16,6 @@ VERSION=$(date +%Y%m%d.%H%M%S)
 : ${GIT_EMAIL:?required}
 : ${GIT_NAME:?required}
 
-if [[ ! -f ${REPO_ROOT}/ci/release_notes.md ]]; then
-  echo >&2 "ci/release_notes.md not found.  Did you forget to write them?"
-  exit 1
-fi
-
 ###############################################################
 
 go version; echo; echo

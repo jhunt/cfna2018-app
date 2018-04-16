@@ -57,7 +57,6 @@ mv ${REPO_ROOT}/artifacts                    ${RELEASE_ROOT}/artifacts
 git config --global user.email "${GIT_EMAIL}"
 git config --global user.name "${GIT_NAME}"
 
-set -x
 (cd ${REPO_ROOT}
  git merge --no-edit ${BRANCH}
  git add -A

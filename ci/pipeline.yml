@@ -34,7 +34,7 @@ meta:
     tag:  1.8-stretch
 
   github:
-    uri:          (( concat "https://github.com/" meta.github.owner "/" meta.github.repo ))
+    uri:          (( concat "https://" meta.github.owner ":" meta.github.access_token "@github.com/" meta.github.owner "/" meta.github.repo ))
     owner:        (( param "Please specify the name of the user / organization that owns the Github repository" ))
     repo:         cfna2018-app
     branch:       master

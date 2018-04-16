@@ -63,5 +63,6 @@ git config --global user.name "${GIT_NAME}"
  git status
  git commit -m "release v${VERSION}" || true)
 
+
 # so that future steps in the pipeline can push our changes
 cp -a ${REPO_ROOT} ${REPO_OUT}/git

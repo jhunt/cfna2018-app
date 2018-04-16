@@ -44,9 +44,9 @@ gox -osarch="${TARGETS}" --output="artifacts/${BINARY}-{{.OS}}-{{.Arch}}" -ldfla
 go build -o "${BINARY}" ${CMD_PKG:-.}
 popd
 
-if [[ ! -f ${REPO_ROOT}/ci/releases_notes.md ]]; then
+if [[ ! -f ${REPO_ROOT}/ci/release_notes.md ]]; then
 	echo "_no release notes provided (yet)_" \
-		> ${REPO_ROOT}/ci/releases_notes.md
+		> ${REPO_ROOT}/ci/release_notes.md
 fi
 echo "v${VERSION}"                         > ${RELEASE_ROOT}/tag
 echo "${RELEASE_NAME} v${VERSION}"         > ${RELEASE_ROOT}/name

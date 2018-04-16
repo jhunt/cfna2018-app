@@ -4,9 +4,11 @@ set -e
 
 export GOPATH=${PWD}/gopath
 export PATH=${PATH}:${GOPATH}/bin
-cd ${GOPATH}/src/${MODULE}
+#cd ${GOPATH}/src/${MODULE}
 
 
+cd code
+set -x
 go version; echo; echo
 go get ./...
 go test -v

@@ -30,8 +30,8 @@ meta:
     force_static_binary: false
 
   image:
-    name: concourse/static-golang
-    tag:  latest
+    name: golang
+    tag:  1.8-stretch
 
   github:
     uri:          (( concat "https://github.com/" meta.github.owner "/" meta.github.repo ))

@@ -1,14 +1,21 @@
 #!/bin/bash
-
 set -e
 
 export GOPATH=${PWD}/gopath
 export PATH=${PATH}:${GOPATH}/bin
-#cd ${GOPATH}/src/${MODULE}
-
-
 cd code
-set -x
+
+echo "##" ; echo "##"
+echo "## Checking go version..."
+echo "##" ; echo "##"
 go version; echo; echo
-go get ./...
+
+echo "##" ; echo "##"
+echo "## Installing application dependencies..."
+echo "##" ; echo "##"
+grep github *.go | awk '{print $2}' | sed -e 's/"//g' | sort | uniq | xargs go get
+
+echo "##" ; echo "##"
+echo "## Running application tests..."
+echo "##" ; echo "##"
 go test -v
